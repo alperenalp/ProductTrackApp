@@ -47,7 +47,7 @@ namespace ProductTrackApp.WebApp.Controllers
 
                     return Redirect("/");
                 }
-                ModelState.AddModelError("", "Kullanıcı adı veya şifre yanlış");
+                ModelState.AddModelError("", "Username or password is incorrect.");
             }
             return View();
         }

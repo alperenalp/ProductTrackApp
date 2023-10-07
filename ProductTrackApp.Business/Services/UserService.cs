@@ -12,18 +12,18 @@ namespace ProductTrackApp.Business.Services
 {
     public class UserService : IUserService
     {
-        private readonly IUserRepository _userRepository;
+        private readonly IUserRepository _repository;
         private readonly IMapper _mapper;
 
-        public UserService(IUserRepository userRepository, IMapper mapper)
+        public UserService(IUserRepository repository, IMapper mapper)
         {
-            _userRepository = userRepository;
+            _repository = repository;
             _mapper = mapper;
         }
 
         public async Task<UserValidateResponse> ValidateUserAsync(ValidateUserLoginRequest request)
         {
-            var users = await _userRepository.GetAllUserAsync();
+            var users = await _repository.GetAllUserAsync();
             var response = users.SingleOrDefault(x => x.Username == request.Username && x.Password == request.Password);
             return _mapper.Map<UserValidateResponse>(response);
         }
