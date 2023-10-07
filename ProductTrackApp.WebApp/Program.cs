@@ -1,7 +1,13 @@
+using Microsoft.EntityFrameworkCore;
+using ProductTrackApp.Data.Contexts;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+var connectionString = builder.Configuration.GetConnectionString("db");
+builder.Services.AddDbContext<ProductTrackAppDbContext>(opt => opt.UseSqlServer(connectionString));
 
 var app = builder.Build();
 

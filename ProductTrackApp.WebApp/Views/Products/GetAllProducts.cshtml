@@ -1,0 +1,56 @@
+﻿
+@{
+    ViewData["Title"] = "GetAllProducts";
+}
+
+
+<div class="row">
+    <div class="col-md-12 p-5">
+        <h4 class="text-center mb-5"><b>Ürün Listesi</b></h4>
+        <table class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th>
+                        başık 1
+                        @*Html.DisplayNameFor(model => model.BloodType)*@
+                    </th>
+                    <th>
+                        başlık 2
+                        @*Html.DisplayNameFor(model => model.Quantity)*@
+                    </th>
+                    <th ></th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    List<string> test = new List<string>{"{x},{y}"};
+                }
+                @foreach (var item in test)
+                {
+                    <tr>
+                        <td>
+                            içerik 1
+                            @*Html.DisplayFor(modelItem => item.BloodType)*@
+                        </td>
+                        <td>
+                            içerik 2
+                            @*Html.DisplayFor(modelItem => item.Quantity)*@
+                        </td>
+                        <td >
+                            <div class="text-center">
+                                <a class="btn btn-warning" asp-action="Edit" asp-route-id="">Düzenle</a>
+                                @Html.ActionLink("Ürün Sil", "Delete", new { }, new {@class="btn btn-danger", onclick = "return confirm('Silmek istediğinize emin misiniz?');" })
+                                @*   @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
+                            @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
+                            @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })*@
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+
