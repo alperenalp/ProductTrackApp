@@ -1,0 +1,40 @@
+﻿@model ValidateUserLoginRequest
+
+@{
+    ViewData["Title"] = "Login";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row h-100 d-flex align-items-center justify-content-center p-5">
+    <div class="col-md-6 p-5 bg-light">
+        <form asp-action="Login" asp-route-returnUrl="@ViewBag.ReturnUrl">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group form-outline mb-4">
+                <label asp-for="Username" class="control-label"></label>
+                <input asp-for="Username" class="form-control" />
+                <span asp-validation-for="Username" class="text-danger"></span>
+            </div>
+            <div class="form-group form-outline mb-4">
+                <label asp-for="Password" class="control-label"></label>
+                <input asp-for="Password" class="form-control" />
+                <span asp-validation-for="Password" class="text-danger"></span>
+            </div>
+            <div class="form-group text-center mt-4">
+                <input type="submit" value="Login" class="btn btn-primary" style="padding: 10px 50px" />
+            </div>
+        </form>
+        <div class="card sidebar-dark-primary mt-5" style="margin-top:5px; color:darkgray;">
+            <div class="card-body text-center">
+                <p class="card-text">
+                <p>Sample Roles:</p>
+                <ul class="list-unstyled">
+                    <li>Username: <strong>manager</strong> Password: <strong>123</strong> - Manager Profile</li>
+                    <li>Username: <strong>employee</strong> Password: <strong>123</strong> - Employee Profile</li>
+                    <li>Username: <strong>user</strong> Password: <strong>123</strong> - User Profile</li>
+                </ul>
+                </p>
+            </div>
+        </div>
+    </div>
+
+</div>

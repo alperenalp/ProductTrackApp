@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using ProductTrackApp.Business.DTOs.Responses;
 using ProductTrackApp.Entities;
 using System;
 using System.Collections.Generic;
@@ -12,7 +13,8 @@ namespace ProductTrackApp.Business.Services.Mappings
     {
         public MapProfile()
         {
-           
+           //User
+           CreateMap<User, UserValidateResponse>().ReverseMap();
 
         }
     }

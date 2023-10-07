@@ -43,7 +43,7 @@
                 @if (User.Identity.IsAuthenticated)
                 {
                     <li class="nav-item">
-                        <a href="/Users/Logout" class="nav-link">
+                        <a href="/Account/Logout" class="nav-link">
                             <p>
                                 Logout, @User.Identity.Name
                             </p>
@@ -54,7 +54,7 @@
                 else
                 {
                     <li class="nav-item">
-                        <a href="/Users/Login" class="nav-link">
+                        <a href="/Account/Login" class="nav-link">
                             <i class="nav-icon fas fa-user"></i>
                             <p>
                                 Login
@@ -79,9 +79,9 @@
                 <!-- Sidebar Menu -->
                 <nav class="mt-2">
                     <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
-                        @if (true)//User.Identity.IsAuthenticated
+                        @if (User.Identity.IsAuthenticated)
                         {
-                            if (true) //User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Role).Value == "Admin"
+                            if (User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Role).Value == "Manager")
                             {
                                 <li class="nav-item">
                                     <a href="/Orders/GetAllOrders" class="nav-link">
@@ -93,7 +93,7 @@
                                 </li>
                             }
                             //@User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.PrimarySid).Value
-                            if (true)//User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Role).Value == "Employee"
+                            if (User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Role).Value == "Employee")
                             {
                                 <li class="nav-item">
                                     <a href="/Products/AddProduct" class="nav-link">
@@ -113,7 +113,7 @@
                                 </li>
                             }
 
-                            if (true)//User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Role).Value == "User"
+                            if (User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Role).Value == "User")
                             {
                                 <li class="nav-item">
                                     <a href="/Orders/AddOrder" class="nav-link">

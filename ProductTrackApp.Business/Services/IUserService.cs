@@ -1,4 +1,6 @@
-﻿using System;
+﻿using ProductTrackApp.Business.DTOs.Requests;
+using ProductTrackApp.Business.DTOs.Responses;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,6 +10,6 @@ namespace ProductTrackApp.Business.Services
 {
     public interface IUserService
     {
-
+        Task<UserValidateResponse> ValidateUserAsync(ValidateUserLoginRequest request);
     }
 }

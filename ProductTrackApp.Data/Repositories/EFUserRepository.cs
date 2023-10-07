@@ -1,4 +1,6 @@
-﻿using ProductTrackApp.Data.Contexts;
+﻿using Microsoft.EntityFrameworkCore;
+using ProductTrackApp.Data.Contexts;
+using ProductTrackApp.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,6 +16,11 @@ namespace ProductTrackApp.Data.Repositories
         public EFUserRepository(ProductTrackAppDbContext context)
         {
             _context = context;
+        }
+
+        public async Task<IList<User>> GetAllUserAsync()
+        {
+            return await _context.Users.AsNoTracking().ToListAsync();
         }
     }
 }
