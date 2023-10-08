@@ -32,7 +32,9 @@
                     <th>
                         @Html.DisplayNameFor(model => model.Status)
                     </th>
-                    <th></th>
+                    <th class="text-center"> 
+                        Operations
+                    </th>
                 </tr>
             </thead>
             <tbody>
@@ -62,8 +64,13 @@
                             @Html.DisplayFor(modelItem => item.Status)
                         </td>
                         <td>
-                            <a class="btn btn-warning" asp-action="Edit" asp-route-id="@item.Id">Edit Product</a>
-                            @Html.ActionLink("Delete Product", "Delete", new { id=@item.Id }, new {@class="btn btn-danger", onclick = "return confirm('Are you sure want to delete?');" })
+                            <form asp-action="ChangeStatus" class="d-flex justify-content-around">
+                                <a class="btn btn-warning" asp-action="Edit" asp-route-id="@item.Id">Edit Product</a>
+                                @Html.ActionLink("Delete Product", "Delete", new { id=@item.Id }, new {@class="btn btn-danger", onclick = "return confirm('Are you sure want to delete?');" })
+                                <input hidden class="form-control" name="id" value="@item.Id" />
+                                <input type="submit" value="Change Status" class="btn btn-primary" />
+                            </form>
+
                         </td>
                     </tr>
                 }

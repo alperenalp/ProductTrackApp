@@ -74,5 +74,18 @@ namespace ProductTrackApp.WebApp.Controllers
             }
             return NotFound();
         }
+
+        [Authorize(Roles = "Employee")]
+        [HttpPost]
+        public async Task<IActionResult> ChangeStatus(int id)
+        {
+            var isProductExists = await _productService.IsProductExistsAsync(id);
+            if (isProductExists)
+            {
+                await _productService.ChangeProductStatusAsync(id);
+                return RedirectToAction(nameof(GetAllProducts));
+            }
+            return NotFound();
+        }
     }
 }

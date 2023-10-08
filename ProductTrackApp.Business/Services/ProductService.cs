@@ -22,6 +22,13 @@ namespace ProductTrackApp.Business.Services
             _mapper = mapper;
         }
 
+        public async Task ChangeProductStatusAsync(int productId)
+        {
+            var product = await _repository.GetProductByIdAsync(productId);
+            product.Status = !product.Status;
+            await _repository.UpdateProductAsync(product);
+        }
+
         public async Task CreateProductAsync(CreateNewProductRequest request)
         {
             var product = _mapper.Map<Product>(request);

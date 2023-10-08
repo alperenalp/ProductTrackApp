@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ProductTrackApp.Business.DTOs.Requests;
+using ProductTrackApp.Business.DTOs.Responses;
 using ProductTrackApp.Business.Services;
 using System.Security.Claims;
 
@@ -15,6 +16,14 @@ namespace ProductTrackApp.WebApp.Controllers
         {
             _productService = productService;
             _orderService = orderService;
+        }
+
+        [Authorize(Roles = "Manager")]
+        public async Task<IActionResult> GetAllOrders()
+        {
+            var managerId = Convert.ToInt32(User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.PrimarySid).Value);
+            var orders = await _orderService.GetAllOrdersByManagerIdAsync(managerId);
+            return View(orders);
         }
 
         [Authorize(Roles = "User")]

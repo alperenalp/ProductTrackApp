@@ -10,6 +10,6 @@ namespace ProductTrackApp.Data.Repositories
     public interface IUserRepository
     {
         Task<IList<User>> GetAllUserAsync();
-
+        Task<IList<User>> GetUsersByManagerIdAsync(int managerId);
     }
 }
