@@ -1,9 +1,8 @@
 ﻿@model IEnumerable<ProductDisplayResponse>
 
 @{
-    ViewData["Title"] = "GetAllProducts";
+    ViewData["Title"] = "AddOrder";
 }
-
 
 <div class="row">
     <div class="col-md-12 p-5">
@@ -28,9 +27,6 @@
                     </th>
                     <th>
                         @Html.DisplayNameFor(model => model.EmployeeId)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.Status)
                     </th>
                     <th></th>
                 </tr>
@@ -59,11 +55,15 @@
                             @Html.DisplayFor(modelItem => item.EmployeeId)
                         </td>
                         <td>
-                            @Html.DisplayFor(modelItem => item.Status)
-                        </td>
-                        <td>
-                            <a class="btn btn-warning" asp-action="Edit" asp-route-id="@item.Id">Edit Product</a>
-                            @Html.ActionLink("Delete Product", "Delete", new { id=@item.Id }, new {@class="btn btn-danger", onclick = "return confirm('Are you sure want to delete?');" })
+                            <form asp-action="AddOrder">
+                                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                                <div hidden class="form-group">
+                                    <input class="form-control" name="id" value="@item.Id" />
+                                </div>
+                                <div class="form-group">
+                                    <input type="submit" value="Create Order" class="btn btn-success" />
+                                </div>
+                            </form>
                         </td>
                     </tr>
                 }

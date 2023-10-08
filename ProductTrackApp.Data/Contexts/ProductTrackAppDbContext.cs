@@ -38,13 +38,7 @@ namespace ProductTrackApp.Data.Contexts
                 entity.Property(e => e.Model).HasMaxLength(50);
                 entity.Property(e => e.Category).HasMaxLength(50);
                 entity.Property(e => e.ProductCode).HasMaxLength(50);
-                entity.Property(e => e.Status).HasDefaultValue(true);
-            });
-
-            modelBuilder.Entity<Order>(entity =>
-            {
-                entity.Property(e => e.Title).HasMaxLength(50);
-                entity.Property(e => e.Status).HasDefaultValue(true);
+                entity.Property(e => e.Status).HasDefaultValue("true");
             });
         }
     }

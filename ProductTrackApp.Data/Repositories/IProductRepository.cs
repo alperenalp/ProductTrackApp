@@ -15,5 +15,6 @@ namespace ProductTrackApp.Data.Repositories
         Task<Product?> GetProductByIdAsync(int ProductId);
         Task<IList<Product>> GetAllProductAsync();
         Task<bool> IsProductExistsAsync(int ProductId);
+        Task<IList<Product>> GetNotHiddenProductsAsync();
     }
 }

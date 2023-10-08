@@ -21,6 +21,9 @@ namespace ProductTrackApp.Business.Services.Mappings
             CreateMap<Product, ProductDisplayResponse>().ReverseMap();
             CreateMap<Product, CreateNewProductRequest>().ReverseMap();
             CreateMap<Product, UpdateProductRequest>().ReverseMap();
+
+            //Order
+            CreateMap<Order, AddNewOrderRequest>().ReverseMap();
         }
     }
 }

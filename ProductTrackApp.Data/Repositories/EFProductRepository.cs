@@ -36,6 +36,11 @@ namespace ProductTrackApp.Data.Repositories
             return await _context.Products.AsNoTracking().ToListAsync();
         }
 
+        public async Task<IList<Product>> GetNotHiddenProductsAsync()
+        {
+            return await _context.Products.AsNoTracking().Where(x => x.Status == true).ToListAsync();
+        }
+
         public async Task<Product?> GetProductByIdAsync(int productId)
         {
             return await _context.Products.AsNoTracking().SingleOrDefaultAsync(x => x.Id == productId);

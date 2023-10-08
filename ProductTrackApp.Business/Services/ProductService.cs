@@ -39,6 +39,12 @@ namespace ProductTrackApp.Business.Services
             return _mapper.Map<IEnumerable<ProductDisplayResponse>>(products);
         }
 
+        public async Task<IEnumerable<ProductDisplayResponse>> GetNotHiddenProductsAsync()
+        {
+            var products = await _repository.GetNotHiddenProductsAsync();
+            return _mapper.Map<IEnumerable<ProductDisplayResponse>>(products);
+        }
+
         public async Task<ProductDisplayResponse> GetProductByIdAsync(int productId)
         {
             var product = await _repository.GetProductByIdAsync(productId);
@@ -49,6 +55,13 @@ namespace ProductTrackApp.Business.Services
         {
             var product = await _repository.GetProductByIdAsync(productId);
             return _mapper.Map<UpdateProductRequest>(product);
+        }
+
+        public async Task HideProductAsync(int id)
+        {
+            var product = await _repository.GetProductByIdAsync(id);
+            product.Status = false;
+            await _repository.UpdateProductAsync(product);
         }
 
         public async Task<bool> IsProductExistsAsync(int productId)

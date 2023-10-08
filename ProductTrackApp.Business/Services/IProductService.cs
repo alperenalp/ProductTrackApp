@@ -17,5 +17,7 @@ namespace ProductTrackApp.Business.Services
         Task<IEnumerable<ProductDisplayResponse>> GetAllProductAsync();
         Task<bool> IsProductExistsAsync(int productId);
         Task UpdateProductAsync(UpdateProductRequest request);
+        Task HideProductAsync(int id);
+        Task<IEnumerable<ProductDisplayResponse>> GetNotHiddenProductsAsync();
     }
 }

@@ -9,8 +9,6 @@ namespace ProductTrackApp.Entities
     public class Order
     {
         public int Id { get; set; }
-        public string? Title { get; set; }
-        public bool Status { get; set; }
 
         public Product? Product { get; set; }
         public int? ProductId{ get; set; }
