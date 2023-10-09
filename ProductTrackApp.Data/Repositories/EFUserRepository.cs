@@ -23,6 +23,11 @@ namespace ProductTrackApp.Data.Repositories
             return await _context.Users.AsNoTracking().ToListAsync();
         }
 
+        public async Task<User?> GetUserByIdAsync(int userId)
+        {
+            return await _context.Users.AsNoTracking().SingleOrDefaultAsync(x => x.Id == userId);
+        }
+
         public async Task<IList<User>> GetUsersByManagerIdAsync(int managerId)
         {
             return await _context.Users.AsNoTracking().Where(x => x.ManagerId == managerId).ToListAsync();

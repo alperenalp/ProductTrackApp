@@ -16,6 +16,7 @@ builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<IProductRepository, EFProductRepository>();
 builder.Services.AddScoped<IOrderService, OrderService>();
 builder.Services.AddScoped<IOrderRepository, EFOrderRepository>();
+builder.Services.AddTransient<IEmailSenderService, EmailSenderService>();
 
 builder.Services.AddAutoMapper(typeof(MapProfile));
 

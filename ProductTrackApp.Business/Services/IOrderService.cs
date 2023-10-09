@@ -11,6 +11,8 @@ namespace ProductTrackApp.Business.Services
     public interface IOrderService
     {
         Task<int> CreateOrderAsync(AddNewOrderRequest request);
+        Task DeleteOrderByIdAsync(int orderId);
         Task<IEnumerable<OrderDisplayResponse>> GetAllOrdersByManagerIdAsync(int managerId);
+        Task<OrderDisplayResponse> GetOrderByIdAsync(int orderId);
     }
 }

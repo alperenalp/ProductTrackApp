@@ -21,6 +21,12 @@ namespace ProductTrackApp.Business.Services
             _mapper = mapper;
         }
 
+        public async Task<UserDisplayResponse> GetUserByIdAsync(int userId)
+        {
+            var user = await _repository.GetUserByIdAsync(userId);
+            return _mapper.Map<UserDisplayResponse>(user);
+        }
+
         public async Task<UserValidateResponse> ValidateUserAsync(ValidateUserLoginRequest request)
         {
             var users = await _repository.GetAllUserAsync();

@@ -76,6 +76,13 @@ namespace ProductTrackApp.Business.Services
             return await _repository.IsProductExistsAsync(productId);
         }
 
+        public async Task ShowProductAsync(int id)
+        {
+            var product = await _repository.GetProductByIdAsync(id);
+            product.Status = true;
+            await _repository.UpdateProductAsync(product);
+        }
+
         public async Task UpdateProductAsync(UpdateProductRequest request)
         {
             var product = _mapper.Map<Product>(request);

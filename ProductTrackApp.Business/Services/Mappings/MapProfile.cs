@@ -16,6 +16,7 @@ namespace ProductTrackApp.Business.Services.Mappings
         {
             //User
             CreateMap<User, UserValidateResponse>().ReverseMap();
+            CreateMap<User, UserDisplayResponse>().ReverseMap();
 
             //Product
             CreateMap<Product, ProductDisplayResponse>().ReverseMap();

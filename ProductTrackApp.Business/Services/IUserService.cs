@@ -10,6 +10,7 @@ namespace ProductTrackApp.Business.Services
 {
     public interface IUserService
     {
+        Task<UserDisplayResponse> GetUserByIdAsync(int userId);
         Task<UserValidateResponse> ValidateUserAsync(ValidateUserLoginRequest request);
     }
 }

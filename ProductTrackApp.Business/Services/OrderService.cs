@@ -30,6 +30,11 @@ namespace ProductTrackApp.Business.Services
             return await _orderRepository.CreateOrderAsync(order);
         }
 
+        public async Task DeleteOrderByIdAsync(int orderId)
+        {
+            await _orderRepository.DeleteOrderAsync(orderId);
+        }
+
         public async Task<IEnumerable<OrderDisplayResponse>> GetAllOrdersByManagerIdAsync(int managerId)
         {
             var managersUsers = await _userRepository.GetUsersByManagerIdAsync(managerId);
@@ -43,6 +48,12 @@ namespace ProductTrackApp.Business.Services
                 }
             }
             return _mapper.Map<IEnumerable<OrderDisplayResponse>>(managerOrders);
+        }
+
+        public async Task<OrderDisplayResponse> GetOrderByIdAsync(int orderId)
+        {
+            var order = await _orderRepository.GetOrderByIdAsync(orderId);
+            return _mapper.Map<OrderDisplayResponse>(order);
         }
     }
 }
