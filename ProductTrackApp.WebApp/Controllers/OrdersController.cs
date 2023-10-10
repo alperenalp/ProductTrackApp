@@ -5,6 +5,7 @@ using ProductTrackApp.Business.DTOs.Requests;
 using ProductTrackApp.Business.DTOs.Responses;
 using ProductTrackApp.Business.Services;
 using ProductTrackApp.Entities;
+using ProductTrackApp.WebApp.Models;
 using System.Security.Claims;
 
 namespace ProductTrackApp.WebApp.Controllers
@@ -27,9 +28,30 @@ namespace ProductTrackApp.WebApp.Controllers
         [Authorize(Roles = "Manager")]
         public async Task<IActionResult> GetAllOrders()
         {
+            List<OrderDisplayVM> ordersVM = await getAllOrdersWithVMAsync();
+            return View(ordersVM);
+        }
+
+        private async Task<List<OrderDisplayVM>> getAllOrdersWithVMAsync()
+        {
             var managerId = Convert.ToInt32(User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.PrimarySid).Value);
             var orders = await _orderService.GetAllOrdersByManagerIdAsync(managerId);
-            return View(orders);
+            var ordersVM = new List<OrderDisplayVM>();
+            foreach (var order in orders)
+            {
+                var user = await _userService.GetUserByIdAsync(order.UserId);
+                var product = await _productService.GetProductByIdAsync(order.ProductId);
+                var vm = new OrderDisplayVM
+                {
+                    Id = order.Id,
+                    Product = product.Brand + " " + product.Model,
+                    UserName = user.Name + " " + user.LastName,
+                    UserEmail = user.Email
+                };
+                ordersVM.Add(vm);
+            }
+
+            return ordersVM;
         }
 
         [Authorize(Roles = "Manager")]
@@ -66,8 +88,32 @@ namespace ProductTrackApp.WebApp.Controllers
         [Authorize(Roles = "User")]
         public async Task<IActionResult> AddOrder()
         {
+            var productsVM = await getAllProductsWithVMAsync();
+
+            return View(productsVM);
+        }
+
+        private async Task<List<ProductDisplayVM>> getAllProductsWithVMAsync()
+        {
             var products = await _productService.GetNotHiddenProductsAsync();
-            return View(products);
+            var productsVM = new List<ProductDisplayVM>();
+            foreach (var product in products)
+            {
+                var user = await _userService.GetUserByIdAsync((int)product.EmployeeId);
+                var vm = new ProductDisplayVM
+                {
+                    ProductCode = product.ProductCode,
+                    Brand = product.Brand,
+                    Category = product.Category,
+                    Id = product.Id,
+                    Model = product.Model,
+                    Status = product.Status,
+                    EmployeeName = user.Name,
+                };
+                productsVM.Add(vm);
+            }
+
+            return productsVM;
         }
 
         [Authorize(Roles = "User")]
@@ -92,8 +138,8 @@ namespace ProductTrackApp.WebApp.Controllers
 
             await SendEmailToManagerAsync(orderId);
 
-            var products = await _productService.GetNotHiddenProductsAsync();
-            return View(products);
+            var productsVM = await getAllProductsWithVMAsync();
+            return View(productsVM);
         }
 
         private async Task SendEmailToManagerAsync(int orderId)

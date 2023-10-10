@@ -1,4 +1,4 @@
-﻿@model IEnumerable<ProductDisplayResponse>
+﻿@model IEnumerable<ProductDisplayVM>
 
 @{
     ViewData["Title"] = "GetAllProducts";
@@ -26,12 +26,12 @@
                     <th>
                         @Html.DisplayNameFor(model => model.ProductCode)
                     </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.EmployeeId)
+                    @*<th>
+                        @Html.DisplayNameFor(model => model.EmployeeName)
                     </th>
                     <th>
                         @Html.DisplayNameFor(model => model.Status)
-                    </th>
+                    </th>*@
                     <th class="text-center"> 
                         Operations
                     </th>
@@ -57,18 +57,18 @@
                         <td>
                             @Html.DisplayFor(modelItem => item.ProductCode)
                         </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.EmployeeId)
+                        @*<td>
+                            @Html.DisplayFor(modelItem => item.EmployeeName)
                         </td>
                         <td>
                             @Html.DisplayFor(modelItem => item.Status)
-                        </td>
+                        </td>*@
                         <td>
                             <form asp-action="ChangeStatus" class="d-flex justify-content-around">
                                 <a class="btn btn-warning" asp-action="Edit" asp-route-id="@item.Id">Edit Product</a>
                                 @Html.ActionLink("Delete Product", "Delete", new { id=@item.Id }, new {@class="btn btn-danger", onclick = "return confirm('Are you sure want to delete?');" })
                                 <input hidden class="form-control" name="id" value="@item.Id" />
-                                <input type="submit" value="Change Status" class="btn btn-primary" />
+                                @*<input type="submit" value="Change Status" class="btn btn-primary" />*@
                             </form>
 
                         </td>

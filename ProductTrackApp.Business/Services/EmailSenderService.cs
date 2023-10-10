@@ -15,13 +15,13 @@ namespace ProductTrackApp.Business.Services
         public async Task SendEmailAsync(string htmlContent, string from, string to)
         {
             MailMessage message = new MailMessage(from, to);
-            message.Subject = "Ürün Talebi";
+            message.Subject = "Product Track App - Ürün Talebi";
             message.Body = htmlContent;
             message.IsBodyHtml = true;
 
             string smtpServer = "smtp-mail.outlook.com";
             int smtpPort = 587; 
-            string smtpUsername = "blabla@outlook.com"; 
+            string smtpUsername = "blablaa@outlook.com"; 
             string smtpPassword = "*****";
 
             SmtpClient smtp = new SmtpClient(smtpServer);

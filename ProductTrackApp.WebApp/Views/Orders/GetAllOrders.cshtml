@@ -1,4 +1,4 @@
-﻿@model IEnumerable<OrderDisplayResponse>
+﻿@model IEnumerable<OrderDisplayVM>
 
 @{
     ViewData["Title"] = "GetAllOrders";
@@ -15,10 +15,13 @@
                         @Html.DisplayNameFor(model => model.Id)
                     </th>
                     <th>
-                        @Html.DisplayNameFor(model => model.ProductId)
+                        @Html.DisplayNameFor(model => model.Product)
                     </th>
                     <th>
-                        @Html.DisplayNameFor(model => model.UserId)
+                        @Html.DisplayNameFor(model => model.UserName)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.UserEmail)
                     </th>
                     <th class="text-center">
                         Operations
@@ -33,10 +36,13 @@
                             @Html.DisplayFor(modelItem => item.Id)
                         </td>
                         <td>
-                            @Html.DisplayFor(modelItem => item.ProductId)
+                            @Html.DisplayFor(modelItem => item.Product)
                         </td>
                         <td>
-                            @Html.DisplayFor(modelItem => item.UserId)
+                            @Html.DisplayFor(modelItem => item.UserName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.UserEmail)
                         </td>
                         <td class="d-flex justify-content-around">
                             <form asp-action="ConfirmOrder">

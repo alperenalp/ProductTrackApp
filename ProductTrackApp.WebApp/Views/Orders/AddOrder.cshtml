@@ -1,4 +1,4 @@
-﻿@model IEnumerable<ProductDisplayResponse>
+﻿@model IEnumerable<ProductDisplayVM>
 
 @{
     ViewData["Title"] = "AddOrder";
@@ -26,9 +26,11 @@
                         @Html.DisplayNameFor(model => model.ProductCode)
                     </th>
                     <th>
-                        @Html.DisplayNameFor(model => model.EmployeeId)
+                        @Html.DisplayNameFor(model => model.EmployeeName)
                     </th>
-                    <th></th>
+                    <th class="text-center">
+                        Operations
+                    </th>
                 </tr>
             </thead>
             <tbody>
@@ -52,10 +54,10 @@
                             @Html.DisplayFor(modelItem => item.ProductCode)
                         </td>
                         <td>
-                            @Html.DisplayFor(modelItem => item.EmployeeId)
+                            @Html.DisplayFor(modelItem => item.EmployeeName)
                         </td>
                         <td>
-                            <form asp-action="AddOrder">
+                            <form asp-action="AddOrder" class="text-center">
                                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                                 <div hidden class="form-group">
                                     <input class="form-control" name="id" value="@item.Id" />

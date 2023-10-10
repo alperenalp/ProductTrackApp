@@ -31,11 +31,11 @@
             </div>
             <div class="form-group">
                 <label asp-for="EmployeeId" class="control-label"></label>
-                <input asp-for="EmployeeId" class="form-control" />
+                <input disabled asp-for="EmployeeId" class="form-control" value="@User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.PrimarySid).Value" />
                 <span asp-validation-for="EmployeeId" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+                <input type="submit" value="Create Product" class="btn btn-primary" />
             </div>
         </form>
     </div>
