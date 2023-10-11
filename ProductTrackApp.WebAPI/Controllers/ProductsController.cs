@@ -21,21 +21,23 @@ namespace ProductTrackApp.WebAPI.Models
             _userService = userService;
         }
 
-        [Authorize(Roles = "Employee, User")]
         [HttpGet]
+        [AllowAnonymous]
+        [Route("[action]")]
         public async Task<IActionResult> GetAllProducts()
         {
             var productsVM = await GetAllProductsWithVMAsync();
             return Ok(productsVM);
         }
 
-        [Authorize(Roles = "Employee")]
+        //[Authorize(Roles = "Employee")]
         [HttpPost]
+        [Route("[action]")]
         public async Task<IActionResult> AddProduct(CreateNewProductRequest request)
         {
             if (ModelState.IsValid)
             {
-                request.EmployeeId = Convert.ToInt32(User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.PrimarySid).Value);
+                //request.EmployeeId = Convert.ToInt32(User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.PrimarySid).Value);
                 await _productService.CreateProductAsync(request);
                 return StatusCode(201, request);
             }

@@ -1,9 +1,13 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using ProductTrackApp.Business.DTOs.Requests;
+using ProductTrackApp.Business.DTOs.Responses;
 using ProductTrackApp.Business.Services;
 using ProductTrackApp.Entities;
+using ProductTrackApp.WebApp.Helpers;
 using ProductTrackApp.WebApp.Models;
+using RestSharp;
 using System.Security.Claims;
 
 namespace ProductTrackApp.WebApp.Controllers
@@ -11,7 +15,8 @@ namespace ProductTrackApp.WebApp.Controllers
     public class ProductsController : Controller
     {
         private readonly IProductService _productService;
-        private readonly IUserService _userService;
+        private readonly IUserService _userService;        
+        string baseUrl = "http://localhost:7139/api";
 
         public ProductsController(IProductService productService, IUserService userService)
         {
@@ -21,9 +26,29 @@ namespace ProductTrackApp.WebApp.Controllers
 
         [Authorize(Roles = "Employee")]
         public async Task<IActionResult> GetAllProducts()
-        {
-            var productsVM = await GetAllProductsWithVMAsync();
-            return View(productsVM);
+        {            
+
+            var url = baseUrl + "/products/GetAllProducts";
+
+            Client<ProductDisplayVM> client = new Client<ProductDisplayVM>();
+            var data =client.ExecuteList(url,Method.Get,"","");
+
+
+            Client<CreateNewProductRequest> client2 = new Client<CreateNewProductRequest>();
+
+            CreateNewProductRequest postModel = new CreateNewProductRequest
+            {
+                Brand="samet",
+                Category="samets",
+                EmployeeId=3,
+                Model="asda",
+                ProductCode="sdlopğ"
+            };
+
+            url = baseUrl + "/products/AddProduct";
+            var post = client2.Execute(url, Method.Post, "", JsonConvert.SerializeObject(postModel));
+
+            return View(data);
         }
 
         private async Task<List<ProductDisplayVM>> GetAllProductsWithVMAsync()
