@@ -5,11 +5,13 @@ VisualStudioVersion = 17.6.33815.320
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProductTrackApp.WebApp", "ProductTrackApp.WebApp\ProductTrackApp.WebApp.csproj", "{2B492590-0DD5-40DE-A675-C0464C8BEEC1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProductTrackApp.Entities", "ProductTrackApp.Entities\ProductTrackApp.Entities.csproj", "{A20A8C10-7B64-4638-9B68-CE81EB5118DA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProductTrackApp.Entities", "ProductTrackApp.Entities\ProductTrackApp.Entities.csproj", "{A20A8C10-7B64-4638-9B68-CE81EB5118DA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProductTrackApp.Data", "ProductTrackApp.Data\ProductTrackApp.Data.csproj", "{7CD32E21-15AB-404A-A9B3-40F2302EC619}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProductTrackApp.Data", "ProductTrackApp.Data\ProductTrackApp.Data.csproj", "{7CD32E21-15AB-404A-A9B3-40F2302EC619}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProductTrackApp.Business", "ProductTrackApp.Business\ProductTrackApp.Business.csproj", "{2FFA63D4-7AE2-49D1-9658-746AC903120B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProductTrackApp.Business", "ProductTrackApp.Business\ProductTrackApp.Business.csproj", "{2FFA63D4-7AE2-49D1-9658-746AC903120B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProductTrackApp.WebAPI", "ProductTrackApp.WebAPI\ProductTrackApp.WebAPI.csproj", "{5C5E681C-56E8-4F4B-9C79-550B73646AC7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{2FFA63D4-7AE2-49D1-9658-746AC903120B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2FFA63D4-7AE2-49D1-9658-746AC903120B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2FFA63D4-7AE2-49D1-9658-746AC903120B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5C5E681C-56E8-4F4B-9C79-550B73646AC7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5C5E681C-56E8-4F4B-9C79-550B73646AC7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5C5E681C-56E8-4F4B-9C79-550B73646AC7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5C5E681C-56E8-4F4B-9C79-550B73646AC7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

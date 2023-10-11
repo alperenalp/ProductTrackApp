@@ -18,5 +18,7 @@ namespace ProductTrackApp.Business.DTOs.Requests
         public string Category { get; set; }
         [Required(ErrorMessage = "Please enter ProductCode.")]
         public string ProductCode { get; set; }
+        public int EmployeeId { get; set; }
+
     }
 }

@@ -1,17 +1,17 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.CodeAnalysis;
 using ProductTrackApp.Business.DTOs.Requests;
-using ProductTrackApp.Business.DTOs.Responses;
 using ProductTrackApp.Business.Services;
-using ProductTrackApp.Entities;
-using ProductTrackApp.WebApp.Models;
+using ProductTrackApp.WebAPI.Models;
+using System.Data;
 using System.Security.Claims;
 
-namespace ProductTrackApp.WebApp.Controllers
+namespace ProductTrackApp.WebAPI.Controllers
 {
-    public class OrdersController : Controller
+    [Route("api/orders")]
+    [ApiController]
+    public class OrdersController : ControllerBase
     {
         private readonly IProductService _productService;
         private readonly IOrderService _orderService;
@@ -27,36 +27,15 @@ namespace ProductTrackApp.WebApp.Controllers
         }
 
         [Authorize(Roles = "Manager")]
+        [HttpGet]
         public async Task<IActionResult> GetAllOrders()
         {
             List<OrderDisplayVM> ordersVM = await getAllOrdersWithVMAsync();
-            return View(ordersVM);
-        }
-
-        private async Task<List<OrderDisplayVM>> getAllOrdersWithVMAsync()
-        {
-            var managerId = Convert.ToInt32(User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.PrimarySid).Value);
-            var orders = await _orderService.GetAllOrdersByManagerIdAsync(managerId);
-            var ordersVM = new List<OrderDisplayVM>();
-            foreach (var order in orders)
-            {
-                var user = await _userService.GetUserByIdAsync(order.UserId);
-                var product = await _productService.GetProductByIdAsync(order.ProductId);
-                var vm = new OrderDisplayVM
-                {
-                    Id = order.Id,
-                    Product = product.Brand + " " + product.Model,
-                    UserName = user.Name + " " + user.LastName,
-                    UserEmail = user.Email
-                };
-                ordersVM.Add(vm);
-            }
-
-            return ordersVM;
+            return Ok(ordersVM);
         }
 
         [Authorize(Roles = "Manager")]
-        [HttpPost]
+        [HttpGet("confirm/{id:int}")]
         public async Task<IActionResult> ConfirmOrder(int id)
         {
             var order = await _orderService.GetOrderByIdAsync(id);
@@ -70,30 +49,59 @@ namespace ProductTrackApp.WebApp.Controllers
 
                 return Ok();
             }
-            return NotFound();
+            return NotFound($"Order with id {id} is not found.");
         }
 
         [Authorize(Roles = "Manager")]
-        [HttpPost]
+        [HttpGet("reject/{id:int}")]
         public async Task<IActionResult> RejectOrder(int id)
         {
-            if (id == 0)
-                return NotFound();
-
             var order = await _orderService.GetOrderByIdAsync(id);
-            await _productService.ShowProductAsync(order.ProductId);
+            if (order != null)
+            {
+                await _productService.ShowProductAsync(order.ProductId);
 
-            await _orderService.DeleteOrderByIdAsync(id);
+                await _orderService.DeleteOrderByIdAsync(id);
 
-            return RedirectToAction(nameof(GetAllOrders));
+                return Ok();
+            }
+            return NotFound($"Order with id {id} is not found.");
         }
 
-        [Authorize(Roles = "User")]
-        public async Task<IActionResult> AddOrder()
-        {
-            var productsVM = await getAllProductsWithVMAsync();
 
-            return View(productsVM);
+        [Authorize(Roles = "User")]
+        [HttpPost]
+        public async Task<IActionResult> AddOrder(int productId)
+        {
+            bool productIsExists = await _productService.IsProductExistsAsync(productId);
+            if (productIsExists)
+            {
+                var userId = Convert.ToInt32(User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.PrimarySid).Value);
+                
+                AddNewOrderRequest request = new AddNewOrderRequest
+                {
+                    productId = productId,
+                    userId = userId
+                };
+
+                int orderId = await _orderService.CreateOrderAsync(request);
+                if (orderId == 0)
+                {
+                    return BadRequest();
+                }
+                else
+                {
+                    await _productService.HideProductAsync(productId);
+                }
+
+                await SendEmailToManagerAsync(orderId);
+
+                return Ok($"Order with id {orderId} is created.");
+            }
+            else
+            {
+                return NotFound($"Product with id {productId} is not found.");
+            }
         }
 
         private async Task<List<ProductDisplayVM>> getAllProductsWithVMAsync()
@@ -119,38 +127,26 @@ namespace ProductTrackApp.WebApp.Controllers
             return productsVM;
         }
 
-        [Authorize(Roles = "User")]
-        [HttpPost]
-        public async Task<IActionResult> AddOrder(int id)
+        private async Task<List<OrderDisplayVM>> getAllOrdersWithVMAsync()
         {
-            bool productIsExists = await _productService.IsProductExistsAsync(id);
-            if (productIsExists)
+            var managerId = Convert.ToInt32(User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.PrimarySid).Value);
+            var orders = await _orderService.GetAllOrdersByManagerIdAsync(managerId);
+            var ordersVM = new List<OrderDisplayVM>();
+            foreach (var order in orders)
             {
-                var userId = Convert.ToInt32(User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.PrimarySid).Value);
-                AddNewOrderRequest request = new AddNewOrderRequest
+                var user = await _userService.GetUserByIdAsync(order.UserId);
+                var product = await _productService.GetProductByIdAsync(order.ProductId);
+                var vm = new OrderDisplayVM
                 {
-                    productId = id,
-                    userId = userId
+                    Id = order.Id,
+                    Product = product.Brand + " " + product.Model,
+                    UserName = user.Name + " " + user.LastName,
+                    UserEmail = user.Email
                 };
-                int orderId = await _orderService.CreateOrderAsync(request);
-                if (orderId == 0)
-                {
-                    return BadRequest();
-                }
-                else
-                {
-                    await _productService.HideProductAsync(id);
-                }
-
-                await SendEmailToManagerAsync(orderId);
-
-                var productsVM = await getAllProductsWithVMAsync();
-                return View(productsVM);
+                ordersVM.Add(vm);
             }
-            else
-            {
-                return NotFound();
-            }
+
+            return ordersVM;
         }
 
         private async Task SendEmailToManagerAsync(int orderId)
@@ -210,5 +206,6 @@ namespace ProductTrackApp.WebApp.Controllers
                                   </html>";
             await _emailSenderService.SendEmailAsync(htmlContent, from, user.Email);
         }
+
     }
 }

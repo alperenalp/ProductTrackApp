@@ -61,7 +61,6 @@ namespace ProductTrackApp.WebApp.Controllers
         {
             if (ModelState.IsValid)
             {
-                request.EmployeeId = Convert.ToInt32(User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.PrimarySid).Value);
                 await _productService.CreateProductAsync(request);
                 return RedirectToAction(nameof(GetAllProducts));
             }
