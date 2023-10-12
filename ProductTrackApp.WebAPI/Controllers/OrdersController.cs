@@ -27,15 +27,18 @@ namespace ProductTrackApp.WebAPI.Controllers
         }
 
         [Authorize(Roles = "Manager")]
+        [AllowAnonymous]
         [HttpGet]
-        public async Task<IActionResult> GetAllOrders()
+        [Route("[action]/{id}")]
+        public async Task<IActionResult> GetAllOrders(int id)
         {
-            List<OrderDisplayVM> ordersVM = await getAllOrdersWithVMAsync();
+            List<OrderDisplayVM> ordersVM = await getAllOrdersWithVMAsync(id);
             return Ok(ordersVM);
         }
 
         [Authorize(Roles = "Manager")]
-        [HttpGet("confirm/{id:int}")]
+        [HttpGet()]
+        [Route("[action]/{id}")]
         public async Task<IActionResult> ConfirmOrder(int id)
         {
             var order = await _orderService.GetOrderByIdAsync(id);
@@ -53,7 +56,8 @@ namespace ProductTrackApp.WebAPI.Controllers
         }
 
         [Authorize(Roles = "Manager")]
-        [HttpGet("reject/{id:int}")]
+        [HttpGet]
+        [Route("[action]/{id}")]
         public async Task<IActionResult> RejectOrder(int id)
         {
             var order = await _orderService.GetOrderByIdAsync(id);
@@ -68,68 +72,29 @@ namespace ProductTrackApp.WebAPI.Controllers
             return NotFound($"Order with id {id} is not found.");
         }
 
-
         [Authorize(Roles = "User")]
         [HttpPost]
-        public async Task<IActionResult> AddOrder(int productId)
+        [Route("[action]/{id}")]
+        public async Task<IActionResult> AddOrder(int id, AddNewOrderRequest request)
         {
-            bool productIsExists = await _productService.IsProductExistsAsync(productId);
+            bool productIsExists = await _productService.IsProductExistsAsync(id);
             if (productIsExists)
             {
-                var userId = Convert.ToInt32(User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.PrimarySid).Value);
-                
-                AddNewOrderRequest request = new AddNewOrderRequest
-                {
-                    productId = productId,
-                    userId = userId
-                };
-
                 int orderId = await _orderService.CreateOrderAsync(request);
-                if (orderId == 0)
-                {
-                    return BadRequest();
-                }
-                else
-                {
-                    await _productService.HideProductAsync(productId);
-                }
+                await _productService.HideProductAsync(id);
 
                 await SendEmailToManagerAsync(orderId);
 
-                return Ok($"Order with id {orderId} is created.");
+                return Ok(request);
             }
             else
             {
-                return NotFound($"Product with id {productId} is not found.");
+                return NotFound($"Product with id {id} is not found.");
             }
         }
 
-        private async Task<List<ProductDisplayVM>> getAllProductsWithVMAsync()
+        private async Task<List<OrderDisplayVM>> getAllOrdersWithVMAsync(int managerId)
         {
-            var products = await _productService.GetNotHiddenProductsAsync();
-            var productsVM = new List<ProductDisplayVM>();
-            foreach (var product in products)
-            {
-                var user = await _userService.GetUserByIdAsync((int)product.EmployeeId);
-                var vm = new ProductDisplayVM
-                {
-                    ProductCode = product.ProductCode,
-                    Brand = product.Brand,
-                    Category = product.Category,
-                    Id = product.Id,
-                    Model = product.Model,
-                    Status = product.Status,
-                    EmployeeName = user.Name,
-                };
-                productsVM.Add(vm);
-            }
-
-            return productsVM;
-        }
-
-        private async Task<List<OrderDisplayVM>> getAllOrdersWithVMAsync()
-        {
-            var managerId = Convert.ToInt32(User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.PrimarySid).Value);
             var orders = await _orderService.GetAllOrdersByManagerIdAsync(managerId);
             var ordersVM = new List<OrderDisplayVM>();
             foreach (var order in orders)

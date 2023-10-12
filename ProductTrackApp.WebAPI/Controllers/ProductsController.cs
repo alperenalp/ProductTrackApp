@@ -21,8 +21,8 @@ namespace ProductTrackApp.WebAPI.Models
             _userService = userService;
         }
 
+        [Authorize(Roles = "Employee, User")]
         [HttpGet]
-        [AllowAnonymous]
         [Route("[action]")]
         public async Task<IActionResult> GetAllProducts()
         {
@@ -30,7 +30,7 @@ namespace ProductTrackApp.WebAPI.Models
             return Ok(productsVM);
         }
 
-        //[Authorize(Roles = "Employee")]
+        [Authorize(Roles = "Employee")]
         [HttpPost]
         [Route("[action]")]
         public async Task<IActionResult> AddProduct(CreateNewProductRequest request)
@@ -44,8 +44,17 @@ namespace ProductTrackApp.WebAPI.Models
             return BadRequest(ModelState);
         }
 
+        [HttpGet]
+        [Route("[action]/{id}")]
+        public async Task<IActionResult> GetProductForUpdate(int id)
+        {
+            var products = await _productService.GetProductForUpdateAsync(id);
+            return Ok(products);
+        }
+
         [Authorize(Roles = "Employee")]
-        [HttpPut("{id:int}")]
+        [HttpPut]
+        [Route("[action]/{id}")]
         public async Task<IActionResult> Edit(int id, UpdateProductRequest request)
         {
             var isProductExists = await _productService.IsProductExistsAsync(id);
@@ -55,7 +64,7 @@ namespace ProductTrackApp.WebAPI.Models
                 {
                     if (ModelState.IsValid)
                     {
-                        request.EmployeeId = Convert.ToInt32(User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.PrimarySid).Value);
+                        //request.EmployeeId = Convert.ToInt32(User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.PrimarySid).Value);
                         await _productService.UpdateProductAsync(request);
                         return Ok(request);
                     }
@@ -71,7 +80,8 @@ namespace ProductTrackApp.WebAPI.Models
         }
 
         [Authorize(Roles = "Employee")]
-        [HttpDelete("{id:int}")]
+        [HttpDelete]
+        [Route("[action]/{id}")]
         public async Task<IActionResult> Delete([FromRoute(Name = "id")] int id)
         {
             var isProductExists = await _productService.IsProductExistsAsync(id);
