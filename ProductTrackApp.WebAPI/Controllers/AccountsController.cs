@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
+using Newtonsoft.Json;
 using ProductTrackApp.Business.DTOs.Requests;
 using ProductTrackApp.Business.Services;
 using System.IdentityModel.Tokens.Jwt;
@@ -53,7 +54,7 @@ namespace ProductTrackApp.WebAPI.Controllers
 
                     return Ok(new { token = new JwtSecurityTokenHandler().WriteToken(token) });
                 }
-                ModelState.AddModelError("", "Username or password is incorrect.");
+                ModelState.AddModelError("", "Invalid credentials");
             }
             return BadRequest(ModelState);
         }

@@ -11,7 +11,7 @@ namespace ProductTrackApp.WebApp.Helpers
             var client = new RestClient(url);
             var clientRequest = new RestRequest("", method);
             clientRequest.AddHeader("Content-Type", "application/json");
-            //clientRequest.AddHeader("Key", token.ToString());
+            clientRequest.AddHeader("Key", token.ToString());
             clientRequest.AddParameter("application/json", bodyJson, ParameterType.RequestBody);
             var clientResponse = client.Execute<T>(clientRequest);
 
@@ -25,7 +25,7 @@ namespace ProductTrackApp.WebApp.Helpers
             var client = new RestClient(url);
             var clientRequest = new RestRequest("", method);
             clientRequest.AddHeader("Content-Type", "application/json");
-            //clientRequest.AddHeader("Key", token.ToString());
+            clientRequest.AddHeader("Key", token.ToString());
             clientRequest.AddParameter("application/json", bodyJson, ParameterType.RequestBody);
             var clientResponse = client.Execute<T>(clientRequest);
 

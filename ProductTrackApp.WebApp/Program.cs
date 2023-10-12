@@ -32,6 +32,10 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
                     opt.ReturnUrlParameter = "returnUrl";
                 });
 
+builder.Services.AddSession(opt =>
+{
+    opt.IdleTimeout = TimeSpan.FromMinutes(15);
+});
 
 var app = builder.Build();
 
@@ -47,6 +51,8 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
+
+app.UseSession();
 
 app.UseAuthentication();
 app.UseAuthorization();
